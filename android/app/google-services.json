@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "558883165267",
+    "project_id": "marketx-4924f",
+    "storage_bucket": "marketx-4924f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558883165267:android:cf8eaaa2526d27915a62a6",
+        "android_client_info": {
+          "package_name": "io.beetkom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_Yh3pkzMmtmOuqYL4jZiIxUhsYjx6vB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558883165267:android:29ae2e812654e34a5a62a6",
+        "android_client_info": {
+          "package_name": "io.beetkom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_Yh3pkzMmtmOuqYL4jZiIxUhsYjx6vB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
