@@ -69,19 +69,19 @@ const PropertyDetails = (props) => {
   const [openEditModal, setOpenEditModal] = useState(false);
 
   const isCurrentUserReviewed = latestReviews?.some(
-    (review) => review.user_id === User?.id
+    (review) => review.user_id === User?.email
   );
 
-  console.log("Feedback : ", feedback);
+  // console.log("latestReviews : ", latestReviews,User);
 
-  console.log("RatingPoint : ", ratingPoint);
+  // console.log("RatingPoint : ", ratingPoint);
 
-  console.log("====================================");
-  console.log(
-    "Latest Reviews : ",
-    JSON.stringify(latestReviews?.data, null, 2)
-  );
-  console.log("====================================");
+  // console.log("====================================");
+  // console.log(
+  //   "Latest Reviews : ",
+  //   JSON.stringify(latestReviews?.data, null, 2)
+  // );
+  // console.log("====================================");
 
   const [toggle, setToggle] = useState(false);
   const styles = dynamicStyles();
@@ -116,7 +116,7 @@ const PropertyDetails = (props) => {
   const handleDeleteReview = async (id) => {
     const payload = {
       id: id,
-      user_id: User?.id,
+      user_id: User?.email,
     };
     console.log("Payload : ", payload);
     setLoading(true);
@@ -179,7 +179,7 @@ const PropertyDetails = (props) => {
     });
 
     getPropertyRating();
-    console.log("USERID => ", User?.id);
+    console.log("USERID => ", User?.email);
     getPropertyAVGRating();
   }, []);
 
@@ -195,7 +195,7 @@ const PropertyDetails = (props) => {
     setToggle(!toggle);
   }, [currentLang]);
 
-  const onPressLogin = () => {};
+  const onPressLogin = () => { };
   const data = [{ id: "1", name: "Item 1" }];
 
   const propertyDetails = [
@@ -623,9 +623,9 @@ const PropertyDetails = (props) => {
           // onFinishRating={onFinishRating}
           // showRating
           ratingCount={5}
-          // onStartRating= {onStartRating}
+        // onStartRating= {onStartRating}
         />
-        {User?.id === item.user_id && (
+        {User?.email === item.user_id && (
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity onPress={() => handleDeleteReview(item?.id)}>
               <Image
@@ -641,7 +641,7 @@ const PropertyDetails = (props) => {
             <TouchableOpacity onPress={() => handleEditModal(item)}>
               <Image
                 style={{ height: 20, width: 20, tintColor: colors.grey9 }}
-                // source={require("../../assets/icons/edit.png")}
+              // source={require("../../assets/icons/edit.png")}
               />
             </TouchableOpacity>
           </View>
@@ -655,7 +655,7 @@ const PropertyDetails = (props) => {
     if (contType === "call") {
       Linking.openURL(`tel:${property.contact_no}`);
     } else {
-      let url = "whatsapp://send?text=Hello&phone=" + "+905338201527";
+      let url = "whatsapp://send?text=Hello&phone=" + `${property.contact_no}`;
       Linking.openURL(url)
         .then((data) => {
           console.log("WhatsApp Opened");
@@ -677,6 +677,7 @@ const PropertyDetails = (props) => {
     }
   };
 
+  // console.log("Rating In the function : ",Property);
   const handlePostReview = async () => {
     if (ratingPoint && feedback) {
       const payload = {
@@ -715,6 +716,8 @@ const PropertyDetails = (props) => {
 
   const renderItem = ({ item }) => (
     <View style={{ width: screenWidth * 0.9 }}>
+      <Text style={[styles.titleStyle, { marginBottom: -5 }]}>{item?.title}</Text>
+
       <View style={{ marginTop: screenHeight * 0.01 }}>
         {/* <Image style={[styles.heartIconStyle, { position: 'absolute', zIndex: 100 }]} source={icons['heart']} /> */}
         <TouchableOpacity
@@ -746,7 +749,13 @@ const PropertyDetails = (props) => {
             {I18n.t(`For ${item.listing_type}`)}
           </Text>
         </View>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => console.log("hi")}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => {
+          setImageUrl({
+            current: item?.main_image,
+            collection: [item?.sub_image_1, item?.sub_image_2],
+          });
+          setShowPropertySubImage(true);
+        }}>
           <FastImage
             style={[
               styles.propertyImageStyle,
@@ -899,7 +908,14 @@ const PropertyDetails = (props) => {
       >
         {/* <View style={styles.tagViewStyle}>
         </View> */}
-        <TouchableOpacity activeOpacity={0.7} onPress={() => console.log("hi")}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => {
+          setImageUrl({
+            current: item?.first_floor_map_image,
+            collection: [item?.first_floor_map_image],
+          });
+          setShowPropertySubImage(true);
+          console.log("hi")
+        }}>
           <FastImage
             style={[
               styles.propertyImageStyle,
@@ -1061,7 +1077,7 @@ const PropertyDetails = (props) => {
             {AVGRating ? AVGRating : 0}
           </Text>
         </View>
-        {!User?.id && (
+        {!User?.email && (
           <Rating
             readonly={true}
             defaultRating={AVGRating ? AVGRating : 0}
@@ -1074,7 +1090,7 @@ const PropertyDetails = (props) => {
             onFinishRating={onFinishRating}
             // showRating
             ratingCount={5}
-            // onStartRating= {onStartRating}
+          // onStartRating= {onStartRating}
           />
         )}
         {isCurrentUserReviewed && (
@@ -1090,10 +1106,10 @@ const PropertyDetails = (props) => {
             onFinishRating={onFinishRating}
             // showRating
             ratingCount={5}
-            // onStartRating= {onStartRating}
+          // onStartRating= {onStartRating}
           />
         )}
-        {User?.id && !isCurrentUserReviewed && (
+        {User?.email && !isCurrentUserReviewed && (
           <>
             <Rating
               readonly={forceStopRating}
@@ -1107,7 +1123,7 @@ const PropertyDetails = (props) => {
               onFinishRating={onFinishRating}
               // showRating
               ratingCount={5}
-              // onStartRating= {onStartRating}
+            // onStartRating= {onStartRating}
             />
             <Text style={[styles.titleStyle, {}]}>
               {I18n.t("Leave a Review")}

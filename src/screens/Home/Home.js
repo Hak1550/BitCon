@@ -319,7 +319,11 @@ const Home = () => {
   );
 
   const renderItem = ({ item, index }) => (
-    <>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => navigation.navigate("PropertyDetails", item)}
+
+    >
       <View
         style={{
           borderBottomColor: colors.black,
@@ -327,11 +331,13 @@ const Home = () => {
           paddingBottom: screenHeight * 0.008,
           marginTop: screenHeight * 0.01,
         }}
+
       >
         {/* //marginBottom: (Properties.length - 1) === index ? screenHeight * 0.15 : 0 }}> */}
         <TouchableOpacity
           style={styles.touchHearStyle}
           onPress={() => handleAddToFavorites(item)}
+
         >
           <Image
             style={[styles.heartIconStyle]}
@@ -372,18 +378,13 @@ const Home = () => {
             {I18n.t(`For ${item.listing_type}`)}
           </Text>
         </View>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => navigation.navigate("PropertyDetails", item)}
-        >
-          <FastImage
-            style={[
-              styles.propertyImageStyle,
-              { borderRadius: screenHeight * 0.012 },
-            ]}
-            source={{ uri: item.main_image }}
-          />
-        </TouchableOpacity>
+        <FastImage
+          style={[
+            styles.propertyImageStyle,
+            { borderRadius: screenHeight * 0.012 },
+          ]}
+          source={{ uri: item.main_image }}
+        />
         {/* // source={images['propertyImage']} /> */}
         {/* <Text style={[styles.subSubTitleStyle, { marginTop: screenHeight * 0.008 }]}>{item.title}</Text>
         <Text style={[styles.propertyTitleStyle, {}]}>{item.sub_title}</Text>
@@ -456,7 +457,7 @@ const Home = () => {
           </View>
         </View>
       </View>
-    </>
+    </TouchableOpacity>
   );
   const ListFooterComponent = () => {
     <View style={{ height: 200, marginBottom: 200 }} />;
@@ -530,7 +531,7 @@ const Home = () => {
   return (
     <>
       <View style={styles.container}>
-        <StatusBar translucent/>
+        <StatusBar translucent />
         <Header
           title={"User Guides"}
           heights={screenHeight * 0.13}
@@ -560,8 +561,8 @@ const Home = () => {
           showsVerticalScrollIndicator={false}
           refreshing={loading}
           onRefresh={getProperties}
-          // onEndReached={onListEndReached}
-          // onEndReachedThreshold={0.3}
+        // onEndReached={onListEndReached}
+        // onEndReachedThreshold={0.3}
         />
         <AdvanceFiltersView />
         <CategoriesView />

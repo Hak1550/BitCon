@@ -193,7 +193,7 @@ const AboutUs = (props) => {
           // marginTop={screenWidth * 0.03}
           paddingHorizontal={screenWidth * 0.02}
           backgroundColor={colors.primary}
-          paddingVertical={screenWidth * 0.03}
+          // paddingVertical={screenWidth * 0.03}
           showLeftIcon={true}
           showTitleInCenter={true}
           leftIconSource={icons["arrow-left"]}
@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize["5"],
     fontWeight: fontWeight[600],
     color: colors.black,
+    marginTop:10
   },
   subHeaderStyle: {
     fontSize: fontSize["3"],
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     alignSelf: "center",
     width: screenWidth * 0.9,
-    marginTop: screenHeight * 0.02,
+    marginTop: screenHeight * 0.008,
     marginBottom: screenHeight * 0.08,
   },
   paragraph: {

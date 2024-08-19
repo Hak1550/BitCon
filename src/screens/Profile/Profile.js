@@ -54,8 +54,8 @@ const Profile = () => {
 
   const handleLogout = async () => {
     auth()
-    .signOut()
-    .then(() => console.log('User signed out!'));
+      .signOut()
+      .then(() => console.log('User signed out!'));
     await clearAllLoggedData()
     dispatch(setUserData({}));
     navigation.dispatch(
@@ -136,7 +136,7 @@ const Profile = () => {
       </View>
     </Modal>
   );
-
+  console.log('User', User);
   return (
     <>
       <View style={styles.container}>
@@ -167,7 +167,7 @@ const Profile = () => {
           <Text style={[styles.headerStyle]}>
             {I18n.t("Login Id")}:{" "}
             <Text style={[styles.verbiageStyle]}>
-              {User?.phoneNumber ? User?.phoneNumber : I18n.t("Guest")}
+              {User?.email ?? I18n.t("Guest")}
             </Text>
           </Text>
           {/* <Text style={[styles.headerStyle]}>{I18n.t('Phone Number')}:  <Text style={[styles.verbiageStyle]}>{'+92 303 4651668'}</Text></Text> */}
