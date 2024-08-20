@@ -37,9 +37,16 @@ import FastImage from "react-native-fast-image";
 import Modal from "react-native-modal";
 import AdvanceFilters from "../../components/AdvanceFIlters";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getLoggedInData } from "../../utils/storage";
 
 const Home = () => {
   const state = useSelector((state) => state);
+  let userData = async () => {
+    const userData = await getLoggedInData();
+
+    console.log('userData getLoggedInData', userData);
+  }
+
 
   console.log("====== state at home ======", state);
 
@@ -81,7 +88,7 @@ const Home = () => {
   const styles = dynamicStyles();
 
   useEffect(() => {
-    console.log("check renderd");
+    userData()
     setToggle(!toggle);
   }, [currentLang]);
 

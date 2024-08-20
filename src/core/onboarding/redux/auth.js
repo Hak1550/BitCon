@@ -19,7 +19,6 @@ const initialState = {
 export const auth = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_USER: {
-      console.log('UPDATE_USER','action.data', action.data)
       let obj = {
         // ...state,
         user: action.data

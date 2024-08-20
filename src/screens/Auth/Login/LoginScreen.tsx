@@ -12,8 +12,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Checkbox from "expo-checkbox";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import PhoneInput from "react-native-phone-number-input";
 import { useDispatch, useSelector } from "react-redux";
 import {
   colors,
@@ -37,6 +37,7 @@ const AuthScreen = () => {
 
   const [phoneNo, setPhoneNo] = useState("");
   const [email, setEmail] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
   const [password, setPassword] = useState("");
   const [screenName, setScreenName] = useState<screens>("Login");
   const [loading, setLoading] = useState(false);
@@ -45,23 +46,23 @@ const AuthScreen = () => {
   const [showReqError, setShowReqError] = useState(false);
   const [payload, setPayload] = useState<any>(null);
 
-  const onAuthStateChanged = async (user) => {
-    if (user) {
-      await setLoggedInData(user);
-      dispatch(setUserData({ sign_up_req: user }));
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: "BottomStack" }],
-        })
-      );
-    }
-  };
+  // const onAuthStateChanged = async (user) => {
+  //   if (user) {
+  //     await setLoggedInData(user);
+  //     dispatch(setUserData({ sign_up_req: user }));
+  //     navigation.dispatch(
+  //       CommonActions.reset({
+  //         index: 0,
+  //         routes: [{ name: "BottomStack" }],
+  //       })
+  //     );
+  //   }
+  // };
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
-  }, []);
+  // useEffect(() => {
+  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+  //   return subscriber;
+  // }, []);
 
   // const signInWithPhoneNumber = async () => {
   //   try {
@@ -107,20 +108,22 @@ const AuthScreen = () => {
       let confirmation = await auth().signInWithEmailAndPassword(
         email,
         password
-        );
-        console.log("User signed ", confirmation);
-      await setLoggedInData(confirmation?.user);
-      dispatch(setUserData({ sign_up_req: confirmation?.user }));
+      );
+      if (rememberMe) {
+        console.log("userData signed 1", confirmation);
+        await setLoggedInData(confirmation?.user);
+        dispatch(setUserData({ sign_up_req: confirmation?.user }));
+      } else {
+        console.log("userData signed 2", confirmation);
+        dispatch(setUserData({ sign_up_req: confirmation?.user }));
+      }
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{ name: "BottomStack" }],
         })
       );
-      ToastAndroid.show(
-        "Login Successfulyy",
-        ToastAndroid.SHORT
-      );
+      ToastAndroid.show("Login Successfulyy", ToastAndroid.SHORT);
 
       setLoading(false);
     } catch (error) {
@@ -148,16 +151,43 @@ const AuthScreen = () => {
     }
   };
 
-  // Function to verify the SMS code
-  // const confirmCode = async (confirmation, code) => {
-  //   try {
-  //     await confirmation.confirm(code);
-  //     console.log('Phone number verified successfully!');
-  //   } catch (error) {
-  //     console.error('SMS verification code confirmation failed:', error);
-  //     throw error;
-  //   }
-  // };
+  const resetPassword = async () => {
+    try {
+      if (!email) {
+        ToastAndroid.show(
+          "Please enter your email address",
+          ToastAndroid.SHORT
+        );
+        return;
+      }
+
+      await auth().sendPasswordResetEmail(email);
+      ToastAndroid.show(
+        "Password reset email sent. Please check your inbox.",
+        ToastAndroid.LONG
+      );
+    } catch (error) {
+      console.log("Password reset error", error, error?.code, error?.message);
+
+      let code = error?.code;
+      if (code === "auth/invalid-email") {
+        ToastAndroid.show(
+          "The email address is badly formatted.",
+          ToastAndroid.SHORT
+        );
+      } else if (code === "auth/user-not-found") {
+        ToastAndroid.show(
+          "There is no user corresponding to this email.",
+          ToastAndroid.SHORT
+        );
+      } else {
+        ToastAndroid.show(
+          "Something went wrong. Please try again.",
+          ToastAndroid.SHORT
+        );
+      }
+    }
+  };
 
   const confirmCode = async () => {
     try {
@@ -199,11 +229,10 @@ const AuthScreen = () => {
         email,
         password
       );
-      ToastAndroid.show(
-        "User registered successfully",
-        ToastAndroid.SHORT
-      );
+      console.log("confirmation", confirmation);
 
+      dispatch(setUserData({ sign_up_req: confirmation?.user }));
+      ToastAndroid.show("User registered successfully", ToastAndroid.SHORT);
 
       setLoading(false);
 
@@ -229,8 +258,11 @@ const AuthScreen = () => {
       setLoading(false);
     }
   };
+  const toggleRememberME = () => {
+    console.log("toggleRememberME", rememberMe);
 
-  console.log("email", email, password);
+    setRememberMe((prev) => !prev);
+  };
 
   return (
     <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
@@ -276,7 +308,9 @@ const AuthScreen = () => {
           </Text>
         </View>
 
-        {screenName === "Login" || screenName === "Register" ? (
+        {screenName === "Login" ||
+        screenName === "Register" ||
+        screenName === "Reset Password" ? (
           <>
             <Text style={styles.title}>{I18n.t(screenName)}</Text>
             <View
@@ -285,27 +319,6 @@ const AuthScreen = () => {
                 marginTop: screenHeight * 0.02,
               }}
             >
-              {/* <PhoneInput
-                placeholder={I18n.t("Phone Number")}
-                containerStyle={{
-                  borderRadius: (screenHeight * 25) / 1000,
-                  borderWidth: 1,
-                  borderColor: colors.textInputBorderColor,
-                }}
-                textContainerStyle={{
-                  alignItems: "center",
-                  height: screenHeight * 0.06,
-                  paddingVertical: screenHeight * 0.002,
-                  borderTopRightRadius: (screenHeight * 25) / 1000,
-                  borderBottomEndRadius: (screenHeight * 25) / 1000,
-                }}
-                defaultValue={phoneNo}
-                defaultCode="TR"
-                layout="first"
-                onChangeFormattedText={(text) => {
-                  setPhoneNo(text);
-                }}
-              /> */}
               <TextInput
                 placeholder={I18n.t("Email")}
                 value={email}
@@ -323,36 +336,70 @@ const AuthScreen = () => {
                   margin: 5,
                 }}
               />
-              <TextInput
-                secureTextEntry
-                placeholder={I18n.t("Password")}
-                autoCapitalize="none"
-                value={password}
-                onChangeText={(e) => setPassword(e)}
-                style={{
-                  height: screenHeight * 0.06,
-                  paddingVertical: screenHeight * 0.002,
-                  borderTopRightRadius: (screenHeight * 25) / 1000,
-                  borderBottomEndRadius: (screenHeight * 25) / 1000,
-                  borderRadius: (screenHeight * 25) / 1000,
-                  borderWidth: 1,
-                  borderColor: colors.textInputBorderColor,
-                  padding: 10,
-                  margin: 5,
-                }}
-              />
+              {screenName !== "Reset Password" && (
+                <TextInput
+                  secureTextEntry
+                  placeholder={I18n.t("Password")}
+                  autoCapitalize="none"
+                  value={password}
+                  onChangeText={(e) => setPassword(e)}
+                  style={{
+                    height: screenHeight * 0.06,
+                    paddingVertical: screenHeight * 0.002,
+                    borderTopRightRadius: (screenHeight * 25) / 1000,
+                    borderBottomEndRadius: (screenHeight * 25) / 1000,
+                    borderRadius: (screenHeight * 25) / 1000,
+                    borderWidth: 1,
+                    borderColor: colors.textInputBorderColor,
+                    padding: 10,
+                    margin: 5,
+                  }}
+                />
+              )}
             </View>
             {showReqError && (
               <Text style={styles.reqFieldsErrorStyle}>
                 {I18n.t("Please enter valid data")}*
               </Text>
             )}
+            {screenName === "Login" && (
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: (screenWidth * 750) / 1000,
+                }}
+              >
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={toggleRememberME}
+                  style={{ flexDirection: "row" }}
+                >
+                  <Checkbox
+                    style={styles.checkbox}
+                    value={rememberMe}
+                    // onChange={toggleRememberME}
+                  />
+                  <Text>Remember Me</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => setScreenName("Reset Password")}
+                >
+                  <Text>Forget Password?</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
             <TouchableOpacity
               style={[styles.registerContainer, { justifyContent: "center" }]}
-              disabled={!email || !password}
+              disabled={!email}
               onPress={
                 screenName === "Login"
                   ? () => signInUser()
+                  : screenName === "Reset Password"
+                  ? () => resetPassword()
                   : () => onPressRegister()
               }
             >
@@ -364,6 +411,8 @@ const AuthScreen = () => {
                 {I18n.t(
                   screenName == "Login"
                     ? "Not a member"
+                    : screenName == "Reset Password"
+                    ? "Go back to"
                     : "Already have an account"
                 )}{" "}
               </Text>
@@ -380,13 +429,14 @@ const AuthScreen = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-
-            <TouchableOpacity onPress={() => handleAsGuest()}>
-              <Text style={styles.contAsGuest}>
-                {I18n.t("Continue as a")}
-                <Text style={styles.guest}>{I18n.t("Guest")} </Text>
-              </Text>
-            </TouchableOpacity>
+            {screenName !== "Reset Password" && (
+              <TouchableOpacity onPress={() => handleAsGuest()}>
+                <Text style={styles.contAsGuest}>
+                  {I18n.t("Continue as a")}
+                  <Text style={styles.guest}>{I18n.t("Guest")} </Text>
+                </Text>
+              </TouchableOpacity>
+            )}
           </>
         ) : (
           <>

@@ -5,6 +5,7 @@ export const USER_DATA = '@sesson:data'
 export const setLoggedInData = async (data) => {
     try {
         const jsonValue = JSON.stringify(data);
+        
         await AsyncStorage.setItem(USER_DATA, jsonValue);
     } catch (error) {
         console.log({ error })

@@ -21,6 +21,8 @@ const Splash = ({ navigation }) => {
   const redirectScreen = async () => {
     const userData = await getLoggedInData();
 
+    console.log('userData', userData);
+
     if (userData) {
       dispatch(setUserData({ sign_up_req: userData }));
       navigation.dispatch(

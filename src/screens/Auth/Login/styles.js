@@ -81,6 +81,10 @@ const dynamicStyles = () => {
       fontWeight: fontWeight[300],
       color: colors.black,
     },
+    checkbox: {
+      marginRight: 8,
+      zIndex:1
+    },
   })
 }
 
