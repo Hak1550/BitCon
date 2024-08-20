@@ -167,7 +167,7 @@ const Profile = () => {
           <Text style={[styles.headerStyle]}>
             {I18n.t("Login Id")}:{" "}
             <Text style={[styles.verbiageStyle]}>
-              {User?.email ?? I18n.t("Guest")}
+              {User?.displayName ?? I18n.t("Guest")}
             </Text>
           </Text>
           {/* <Text style={[styles.headerStyle]}>{I18n.t('Phone Number')}:  <Text style={[styles.verbiageStyle]}>{'+92 303 4651668'}</Text></Text> */}

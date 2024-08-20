@@ -35,7 +35,7 @@ const AuthScreen = () => {
   const styles = dynamicStyles();
   const dispatch = useDispatch();
 
-  const [phoneNo, setPhoneNo] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
   const [password, setPassword] = useState("");
@@ -230,6 +230,11 @@ const AuthScreen = () => {
         password
       );
       console.log("confirmation", confirmation);
+      // Update the user profile with the username
+      await confirmation.user.updateProfile({
+        displayName: username, // 'username' is the value you want to set
+      });
+      console.log("confirmation 1", confirmation);
 
       dispatch(setUserData({ sign_up_req: confirmation?.user }));
       ToastAndroid.show("User registered successfully", ToastAndroid.SHORT);
@@ -319,6 +324,25 @@ const AuthScreen = () => {
                 marginTop: screenHeight * 0.02,
               }}
             >
+              {screenName == "Register" && (
+                <TextInput
+                  placeholder={I18n.t("Name")}
+                  value={username}
+                  autoCapitalize="none"
+                  onChangeText={(e) => setUsername(e)}
+                  style={{
+                    height: screenHeight * 0.06,
+                    paddingVertical: screenHeight * 0.002,
+                    borderTopRightRadius: (screenHeight * 25) / 1000,
+                    borderBottomEndRadius: (screenHeight * 25) / 1000,
+                    borderRadius: (screenHeight * 25) / 1000,
+                    borderWidth: 1,
+                    borderColor: colors.textInputBorderColor,
+                    padding: 10,
+                    margin: 5,
+                  }}
+                />
+              )}
               <TextInput
                 placeholder={I18n.t("Email")}
                 value={email}

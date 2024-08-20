@@ -23,7 +23,7 @@ const dynamicStyles = () => {
       // transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
     },
     propertyImageStyle: {
-      marginTop: screenHeight * 0.015,
+      // marginTop: screenHeight * 0.015,
       width: screenWidth * 0.9,
       height: screenHeight * 0.2,
     },
@@ -232,7 +232,7 @@ const dynamicStyles = () => {
       position: "absolute",
       zIndex: 100,
       alignSelf: "flex-end",
-      top: 20,
+      top: 10,
       right: 10,
     },
     modalInsideContailer: {

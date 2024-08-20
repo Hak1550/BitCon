@@ -167,7 +167,7 @@ const AboutUs = (props) => {
               textDecorationLine: "underline",
             }}
           >
-            &#8237; +905338201527{" "}
+            &#8237; +970597861621{" "}
           </Text>
         </TouchableOpacity>
         {I18n.t("afterNumber")}

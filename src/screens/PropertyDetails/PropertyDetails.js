@@ -44,11 +44,6 @@ const PropertyDetails = (props) => {
   const Favorites = useSelector((state) => state.fav.Favorites);
   const User = useSelector((state) => state?.auth?.user?.sign_up_req);
 
-  console.log("Property.id : ", Property.id);
-  console.log("====================================");
-  console.log("User : ", User);
-  console.log("====================================");
-
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -69,19 +64,8 @@ const PropertyDetails = (props) => {
   const [openEditModal, setOpenEditModal] = useState(false);
 
   const isCurrentUserReviewed = latestReviews?.some(
-    (review) => review.user_id === User?.email
+    (review) => review.user_id === User?.displayName
   );
-
-  // console.log("latestReviews : ", latestReviews,User);
-
-  // console.log("RatingPoint : ", ratingPoint);
-
-  // console.log("====================================");
-  // console.log(
-  //   "Latest Reviews : ",
-  //   JSON.stringify(latestReviews?.data, null, 2)
-  // );
-  // console.log("====================================");
 
   const [toggle, setToggle] = useState(false);
   const styles = dynamicStyles();
@@ -90,7 +74,6 @@ const PropertyDetails = (props) => {
     await axios
       .get(baseUrl + routes.getAllRatings + "?property_id=" + Property.id)
       .then((response) => {
-        console.log("GetRating : ", response.data.data.rating);
         setLatestReviews(response?.data?.data.reverse());
         setDefaultRating(response.data.data.rating);
         if (response.data.data.rating) {
@@ -118,7 +101,6 @@ const PropertyDetails = (props) => {
       id: id,
       user_id: User?.email,
     };
-    console.log("Payload : ", payload);
     setLoading(true);
     await axios
       .delete(baseUrl + routes.deleteRating, { data: payload })
@@ -612,18 +594,12 @@ const PropertyDetails = (props) => {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Rating
           readonly={true}
-          // defaultRating={5}
           type="custom"
           ratingColor={colors.primary}
           imageSize={15}
           style={{ alignSelf: "flex-start", marginTop: 10 }}
-          // tintColor={colors.primary}
           startingValue={item?.rating}
-          // onSwipeRating={onSwipeRating}
-          // onFinishRating={onFinishRating}
-          // showRating
           ratingCount={5}
-        // onStartRating= {onStartRating}
         />
         {User?.email === item.user_id && (
           <View style={{ flexDirection: "row" }}>
@@ -651,11 +627,10 @@ const PropertyDetails = (props) => {
   );
 
   const handleContact = (property, contType) => {
-    console.log("property.contact_no", property.contact_no);
     if (contType === "call") {
       Linking.openURL(`tel:${property.contact_no}`);
     } else {
-      let url = "whatsapp://send?text=Hello&phone=" + `${property.contact_no}`;
+      let url = "whatsapp://send?text=Hello&phone=" + `+970597861621`;
       Linking.openURL(url)
         .then((data) => {
           console.log("WhatsApp Opened");
@@ -666,9 +641,6 @@ const PropertyDetails = (props) => {
     }
   };
   const onFinishRating = (rating) => {
-    console.log("====================================");
-    console.log("Rating In the function : ", rating);
-    console.log("====================================");
     setRatingPoint(rating);
     if (!feedback) {
       setcheck(true);
@@ -677,7 +649,6 @@ const PropertyDetails = (props) => {
     }
   };
 
-  // console.log("Rating In the function : ",Property);
   const handlePostReview = async () => {
     if (ratingPoint && feedback) {
       const payload = {
@@ -685,7 +656,7 @@ const PropertyDetails = (props) => {
         property_id: Property.id,
         user_id: User.id,
         feedback: feedback,
-        user_name: User?.name,
+        user_name: User?.displayName,
       };
       setcheck(false);
       console.log("Payload : ", payload);
@@ -733,17 +704,7 @@ const PropertyDetails = (props) => {
             }
           />
         </TouchableOpacity>
-        {/* <TouchableOpacity style={{
-          position: 'absolute',
-          zIndex: 100, alignSelf: 'flex-end',
-          right: 8,
-          top: screenHeight * 0.16,
-        }} onPress={() => handleContact(item)}>
-          <Image style={{
-            width: screenWidth * 0.10,
-            height: screenHeight * 0.04,
-          }} source={icons['whatsapp']} />
-        </TouchableOpacity> */}
+        
         <View style={styles.tagViewStyle}>
           <Text style={styles.tagTitleStyle}>
             {I18n.t(`For ${item.listing_type}`)}
@@ -764,11 +725,11 @@ const PropertyDetails = (props) => {
             source={{ uri: item.main_image }}
           />
         </TouchableOpacity>
-        <Text
+        {/* <Text
           style={[styles.subSubTitleStyle, { marginTop: screenHeight * 0.008 }]}
         >
           {item.title}
-        </Text>
+        </Text> */}
       </View>
       <View
         style={{
@@ -914,7 +875,6 @@ const PropertyDetails = (props) => {
             collection: [item?.first_floor_map_image],
           });
           setShowPropertySubImage(true);
-          console.log("hi")
         }}>
           <FastImage
             style={[

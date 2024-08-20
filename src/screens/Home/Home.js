@@ -329,14 +329,14 @@ const Home = () => {
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={() => navigation.navigate("PropertyDetails", item)}
-
+      style={{ marginVertical: 7, elevation: 5,  backgroundColor: '#fff', borderRadius: screenHeight * 0.012 }}
     >
       <View
         style={{
           borderBottomColor: colors.black,
           borderBottomWidth: 1.5,
           paddingBottom: screenHeight * 0.008,
-          marginTop: screenHeight * 0.01,
+          // marginTop: screenHeight * 0.01,
         }}
 
       >
@@ -350,8 +350,8 @@ const Home = () => {
             style={[styles.heartIconStyle]}
             source={
               Favorites?.findIndex((fav) => fav.id == item.id) < 0
-                ? icons["heartEmpty"]
-                : icons["heart"]
+                ? icons["heartEmptyColor"]
+                : icons["heartColor"]
             }
           />
         </TouchableOpacity>
@@ -397,17 +397,17 @@ const Home = () => {
         <Text style={[styles.propertyTitleStyle, {}]}>{item.sub_title}</Text>
         <Text style={[styles.propertyDescriptionStyle, {}]}>{item.description}</Text> */}
         {/* <View style={{ flexDirection: 'row',width:screenWidth }}> */}
-        <View>
+        <View style={{}}>
           <Text
             style={[
               styles.subSubTitleStyle,
-              { marginTop: screenHeight * 0.008 },
+              { marginTop: screenHeight * 0.008, paddingHorizontal:5 },
             ]}
           >
             {item.title}
           </Text>
-          <Text style={[styles.propertyTitleStyle, {}]}>{item.sub_title}</Text>
-          <Text style={[styles.propertyDescriptionStyle, {}]}>
+          <Text style={[styles.propertyTitleStyle, {paddingHorizontal:5}]}>{item.sub_title}</Text>
+          <Text style={[styles.propertyDescriptionStyle, {paddingHorizontal:5}]}>
             {item.description}
           </Text>
           {/* </View>
@@ -421,6 +421,7 @@ const Home = () => {
           flexDirection: "row",
           width: screenWidth * 0.9,
           justifyContent: "space-between",
+          padding:5
         }}
       >
         <Text style={[styles.subPropertyPriceStyle]}>{`${item.price} $`}</Text>

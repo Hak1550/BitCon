@@ -24,14 +24,8 @@ const EditReviewModal = ({
   const [ratingPoint, setRatingPoint] = useState();
   const [check, setCheck] = useState();
 
-  console.log("====================================");
-  console.log("EditableItem : ", editableItem);
-  console.log("====================================");
 
   const onFinishRating = (rating) => {
-    console.log("====================================");
-    console.log("Rating In the function : ", rating);
-    console.log("====================================");
     setRatingPoint(rating);
     if (!feedback) {
       setCheck(true);
