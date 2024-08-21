@@ -1,4 +1,4 @@
-export const baseUrl = "https://api.marketx.site/";
+export const baseUrl = "https://gapi.beetkom.org/";
 
 export const routes = {
   // auth

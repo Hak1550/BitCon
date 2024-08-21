@@ -46,61 +46,6 @@ const AuthScreen = () => {
   const [showReqError, setShowReqError] = useState(false);
   const [payload, setPayload] = useState<any>(null);
 
-  // const onAuthStateChanged = async (user) => {
-  //   if (user) {
-  //     await setLoggedInData(user);
-  //     dispatch(setUserData({ sign_up_req: user }));
-  //     navigation.dispatch(
-  //       CommonActions.reset({
-  //         index: 0,
-  //         routes: [{ name: "BottomStack" }],
-  //       })
-  //     );
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber;
-  // }, []);
-
-  // const signInWithPhoneNumber = async () => {
-  //   try {
-  //     showReqError && setShowReqError(false);
-  //     if (phoneNo?.length < 9) {
-  //       Alert.alert('Error', "Please enter valid phone number");
-  //       return;
-  //     }
-  //     setLoading(true);
-  //     const confirmation = await auth().signInWithPhoneNumber(phoneNo);
-  //     setPayload(confirmation);
-  //     setScreenName("OTP");
-  //   } catch (error) {
-  //     console.log("🚀 ~ signInWithPhoneNumber ~ error:", error);
-  //     setShowReqError(true);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
-  // Function to send SMS verification code
-  // const signInWithPhoneNumber = async () => {
-  //   try {
-  //     const confirmation = await auth().signInWithPhoneNumber(phoneNo);
-  //     setPayload(confirmation);
-  //     setScreenName("OTP");
-  //   } catch (error) {
-  //         setShowReqError(true);
-  //     if (error.code === "auth/quota-exceeded") {
-  //       console.error("SMS quota exceeded, please try again later.");
-  //     } else if (error.code === "auth/invalid-phone-number") {
-  //       console.error("Invalid phone number format.");
-  //     } else {
-  //       console.error("SMS verification failed:", error.message);
-  //     }
-  //   }
-  // };
-  // Function to sign in an existing user
   const signInUser = async () => {
     try {
       setLoading(true);
@@ -110,11 +55,9 @@ const AuthScreen = () => {
         password
       );
       if (rememberMe) {
-        console.log("userData signed 1", confirmation);
         await setLoggedInData(confirmation?.user);
         dispatch(setUserData({ sign_up_req: confirmation?.user }));
       } else {
-        console.log("userData signed 2", confirmation);
         dispatch(setUserData({ sign_up_req: confirmation?.user }));
       }
       navigation.dispatch(
@@ -123,7 +66,7 @@ const AuthScreen = () => {
           routes: [{ name: "BottomStack" }],
         })
       );
-      ToastAndroid.show("Login Successfulyy", ToastAndroid.SHORT);
+      ToastAndroid.show("Login Successfully", ToastAndroid.SHORT);
 
       setLoading(false);
     } catch (error) {
@@ -144,10 +87,6 @@ const AuthScreen = () => {
       } else if (code === "auth/weak-password") {
         ToastAndroid.show("Password is week.", ToastAndroid.SHORT);
       }
-
-      // console.error(error.message);
-      // await setLoggedInData(confirmation?.user);
-      // dispatch(setUserData({ sign_up_req: confirmation?.user }));
     }
   };
 
@@ -235,7 +174,10 @@ const AuthScreen = () => {
         displayName: username, // 'username' is the value you want to set
       });
       console.log("confirmation 1", confirmation);
-
+      setEmail("");
+      setPassword("");
+      setUsername("");
+      setScreenName("Login");
       dispatch(setUserData({ sign_up_req: confirmation?.user }));
       ToastAndroid.show("User registered successfully", ToastAndroid.SHORT);
 
@@ -395,18 +337,20 @@ const AuthScreen = () => {
                   width: (screenWidth * 750) / 1000,
                 }}
               >
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={toggleRememberME}
-                  style={{ flexDirection: "row" }}
-                >
-                  <Checkbox
-                    style={styles.checkbox}
-                    value={rememberMe}
-                    // onChange={toggleRememberME}
-                  />
+                <View style={{ flexDirection: "row" }}>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={toggleRememberME}
+                    style={{ height: 25, width: 25, zIndex: 1 }}
+                  >
+                    <Checkbox
+                      style={styles.checkbox}
+                      value={rememberMe}
+                      // onChange={toggleRememberME}
+                    />
+                  </TouchableOpacity>
                   <Text>Remember Me</Text>
-                </TouchableOpacity>
+                </View>
                 <TouchableOpacity
                   activeOpacity={0.8}
                   onPress={() => setScreenName("Reset Password")}
