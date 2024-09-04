@@ -113,6 +113,11 @@
   "reviewValidation": "Rating and Review both are required",
   "Edit Review": "Edit Review",
   "Save": "Save",
+  "RememberMe":"Remember Me",
+  "ForgetPassword":"Forget Password?",
+  "The email address is already in use by another account.":"The email address is already in use by another account.",
+  "The email address is badly formatted.":"The email address is badly formatted.",
+  "The given password is invalid.":"The given password is invalid.",
 
   "Beetkom": "Beetkom",
   "p1": "Welcome to Beetkom! Property lovers come together to discover their dream home. Beetkom will find your ideal residence where you will spend the future years peacefully. It will highlight the golden years of your life or assist you while you grow your career. Beetkom brand is open to students, careerists, and families who are searching for accommodation. Its clients include anyone who is seeking a roof with ideal amenities.",

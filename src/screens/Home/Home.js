@@ -44,7 +44,7 @@ const Home = () => {
   let userData = async () => {
     const userData = await getLoggedInData();
 
-    console.log('userData getLoggedInData', userData);
+    console.log('userData getLoggedInData', userData,state);
   }
 
 

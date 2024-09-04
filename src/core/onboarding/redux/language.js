@@ -1,6 +1,6 @@
 const SWITCH_LANG = 'SWITCH_LANG'
 
-export const defaultLang = 'en'
+export const defaultLang = 'ar'
 
 export const switchLang = data => ({
   type: SWITCH_LANG,

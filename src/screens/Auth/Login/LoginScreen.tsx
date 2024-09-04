@@ -71,15 +71,22 @@ const AuthScreen = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log("User signed error", error, error?.code, error?.message);
-
+      
       let code = error?.code;
+      console.log("User signed error", error, error?.code, error?.message);
+      let errorToShow = "";
       if (code === "auth/invalid-credential") {
         ToastAndroid.show(
           "Email/password is not correct or not registered",
           ToastAndroid.SHORT
-        );
-      } else if (code === "auth/invalid-email") {
+          );
+        } else if (code === "auth/invalid-email") {
+        // errorToShow = I18n.t(
+        //   "The email address is already in use by another account."
+        //   );
+        //   console.log("User signed error2",errorToShow);
+
+        // ToastAndroid.show(errorToShow, ToastAndroid.SHORT);
         ToastAndroid.show(
           "The email address is badly formatted.",
           ToastAndroid.SHORT
@@ -160,7 +167,7 @@ const AuthScreen = () => {
       })
     );
   };
-  const onPressRegister = async () => {
+  const onPressRegister = async (I18n) => {
     try {
       setLoading(true);
 
@@ -168,7 +175,6 @@ const AuthScreen = () => {
         email,
         password
       );
-      console.log("confirmation", confirmation);
       // Update the user profile with the username
       await confirmation.user.updateProfile({
         displayName: username, // 'username' is the value you want to set
@@ -186,17 +192,21 @@ const AuthScreen = () => {
       console.log("User account created & signed in!", confirmation);
     } catch (error) {
       let code = error?.code;
+      let errorToShow = "";
+      console.log("errorToShow 1", error, errorToShow);
       if (code === "auth/email-already-in-use") {
-        ToastAndroid.show(
-          "The email address is already in use by another account.",
-          ToastAndroid.SHORT
+        errorToShow = I18n.t(
+          "The email address is already in use by another account."
         );
+
+        ToastAndroid.show("The email address is already in use by another account.", ToastAndroid.SHORT);
       } else if (code === "auth/invalid-email") {
-        ToastAndroid.show(
-          "The email address is badly formatted.",
-          ToastAndroid.SHORT
-        );
+        errorToShow = I18n.t("The email address is badly formatted.");
+        console.log("errorToShow", errorToShow);
+
+        ToastAndroid.show("The email address is badly formatted.", ToastAndroid.SHORT);
       } else if (code === "auth/weak-password") {
+        errorToShow = I18n.t("The given password is invalid.");
         ToastAndroid.show("The given password is invalid.", ToastAndroid.SHORT);
       }
 
@@ -349,13 +359,13 @@ const AuthScreen = () => {
                       // onChange={toggleRememberME}
                     />
                   </TouchableOpacity>
-                  <Text>Remember Me</Text>
+                  <Text>{I18n.t("RememberMe")}</Text>
                 </View>
                 <TouchableOpacity
                   activeOpacity={0.8}
                   onPress={() => setScreenName("Reset Password")}
                 >
-                  <Text>Forget Password?</Text>
+                  <Text>{I18n.t("ForgetPassword")}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -368,7 +378,7 @@ const AuthScreen = () => {
                   ? () => signInUser()
                   : screenName === "Reset Password"
                   ? () => resetPassword()
-                  : () => onPressRegister()
+                  : () => onPressRegister(I18n)
               }
             >
               <Text style={styles.registerText}>{I18n.t(screenName)}</Text>
